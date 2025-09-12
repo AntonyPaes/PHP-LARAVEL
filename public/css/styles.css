@@ -1,0 +1,460 @@
+/* Estilos Globais */
+* {
+    font-family: "Roboto";
+}
+
+body {
+    min-height: 100vh;
+    padding-bottom: 100px;
+    position: relative;
+}
+
+header {
+    background-color: #000000;
+    border-bottom: 1px solid #cccc;
+}
+
+.row {
+    margin: 0;
+}
+
+.container-fluid {
+    padding: 0;
+}
+
+.btn-primary {
+    background-color: #ff0000;
+    border: 2px solid #000000cc;
+    color: #fff;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: #c00000;
+    border-color: #c00000;
+}
+
+.msg {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+/* ------------------ Navbar ------------------ */
+/* SUGESTÃO DE CSS MELHORADO */
+/* ------------------ Navbar ------------------ */
+#navbar img {
+    width: 250px; /* Mantive o tamanho do seu logo */
+}
+
+#navbar {
+    justify-content: space-between;
+    background-color: #ffffff;
+    padding: 5px 20px; /* Adicionei um pouco de padding nas laterais */
+}
+
+/* Estilo principal para os links do menu */
+#navbar .nav-link {
+    font-size: 16px;                     /* Aumentei um pouco para melhor leitura */
+    font-weight: 700;                    /* Deixa a fonte mais forte e destacada */
+    color: #000000;                     /* Cor preta para combinar com o tema */
+    text-transform: uppercase;           /* Deixa o texto em maiúsculas, um estilo mais moderno/esportivo */
+    padding: 10px 15px;                  /* Adiciona mais espaçamento para não ficar tudo grudado */
+    transition: color 0.3s ease-in-out;  /* Efeito de transição suave para a cor */
+    position: relative;                  /* Necessário para o efeito de sublinhado que faremos abaixo */
+    text-decoration: none;               /* Garante que não tenha o sublinhado padrão */
+}
+
+/* Efeito ao passar o mouse */
+#navbar .nav-link:hover {
+    color: #ff0000; /* Muda a cor da letra para o vermelho do SPFC */
+}
+
+/* Efeito de sublinhado que aparece ao passar o mouse */
+#navbar .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%; /* Começa no meio */
+    width: 0; /* Começa com largura zero */
+    height: 3px;
+    background-color: #ff0000; /* Cor do sublinhado */
+    transition: all 0.3s ease-in-out; /* Animação suave */
+}
+
+/* Expande o sublinhado ao passar o mouse */
+#navbar .nav-link:hover::after {
+    width: 100%; /* Largura total */
+    left: 0; /* Alinha à esquerda */
+}
+/* ------------------ Contêiner de Busca ------------------ */
+/* SUGESTÃO DE CSS MELHORADO */
+/* ------------------ Contêiner de Busca ------------------ */
+#search-container {
+    background-image: url("../img/5.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 525px;
+    padding: 50px; /* Reduz o padding para dar mais controle com flexbox */
+    
+    /* Usamos flexbox para centralizar o conteúdo verticalmente de forma perfeita */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#search-container h1 {
+    color: #ffffff; /* Branco sólido */
+    font-weight: 900;
+    font-size: 3rem; /* Tamanho maior e mais impactante */
+    text-transform: uppercase; /* Deixa o texto em maiúsculas */
+    letter-spacing: 2px; /* Aumenta o espaçamento entre as letras */
+    
+    /* Sombra no texto para destacá-lo do fundo e melhorar a legibilidade */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); 
+    
+    margin-bottom: 30px;
+}
+
+#search-container form {
+    width: 60%; /* Um pouco maior */
+    max-width: 600px; /* Limita o tamanho em telas grandes */
+    margin: 0 auto;
+}
+
+/* --- A estilização da barra de busca --- */
+#search.form-control {
+    height: 55px; /* Mais alta */
+    border-radius: 50px; /* Totalmente arredondada */
+    border: 2px solid rgba(255, 255, 255, 0.5); /* Borda branca transparente */
+    background-color: rgba(0, 0, 0, 0.4); /* Fundo escuro e transparente */
+    
+    /* Estilo do texto e placeholder */
+    color: #ffffff; 
+    font-size: 1.1rem;
+    font-weight: 500;
+    
+    /* Espaço interno para o texto não colar nas bordas e no ícone */
+    padding-left: 50px;
+    padding-right: 20px;
+
+    /* Ícone de busca como imagem de fundo */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 15px center; /* Posição do ícone */
+
+    transition: all 0.3s ease-in-out;
+}
+
+/* Efeito ao focar na barra de busca */
+#search.form-control:focus {
+    background-color: rgba(0, 0, 0, 0.6); /* Fica um pouco mais escura */
+    border-color: #ff0000; /* Borda fica vermelha, seguindo a identidade visual */
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.5); /* Adiciona um brilho vermelho */
+    outline: none; /* Remove a borda azul padrão do navegador */
+}
+
+/* Cor do texto do placeholder */
+#search.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* ------------------ Lista de Eventos ------------------ */
+#events-container {
+    padding: 50px;
+}
+
+#events-container h2 {
+    margin-bottom: 10px;
+}
+
+#events-container .subtitle {
+    color: #757575;
+    margin-bottom: 30px;
+}
+
+/* Estilo para o contêiner dos cards */
+#cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Estilo para cada card individual */
+#events-container .card {
+    flex: 0 0 24%;
+    max-width: 300px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 400px;
+}
+
+#events-container .card:hover {
+    transform: translateY(-5px);
+}
+
+#events-container img {
+    height: 150px;
+    width: 100%;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.card-body {
+    flex-grow: 1;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card .card-date {
+    font-size: 12px;
+    color: #000000;
+    margin-bottom: 5px;
+}
+
+.card .card-title {
+    color: #212121;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card .card-participants {
+    font-size: 14px;
+    color: #757575;
+    margin-bottom: 15px;
+}
+
+.card .btn {
+    margin-top: auto;
+}
+
+/* ------------------ Events Create Page ------------------ */
+#event-create-container {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 30px;
+    margin-top: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#event-create-container h1 {
+    color: #343a40;
+    margin-bottom: 25px;
+    text-align: center;
+    font-weight: 700;
+}
+
+#event-create-container label {
+    font-weight: bold;
+    color: #495057;
+    border-bottom: 2px solid #ff0000;
+    padding-bottom: 5px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+    border-color: #ff0000;
+    box-shadow: 0 0 0 0.25rem rgba(255, 0, 0, 0.25);
+    outline: none;
+}
+
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.btn-primary {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 30px;
+    color: #fff;
+    cursor: pointer;
+    background-color: #ff0000;
+    border-color: #ff0000;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: #c00000;
+    border-color: #c00000;
+}
+
+/* Event Page */
+#image-container img{
+    border-radius: 10px;
+}
+
+#image-container, #info-container {
+    margin-top: 50px;
+}
+
+#info-container h1 {
+    font-size: 36px;
+    font-weight: 900;
+}
+#info-container p{
+    margin: 0;
+    font-size: 15px;
+    display: flex;
+}
+
+#info-container h3, #description-container h3{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#info-container ion-icon{
+    font-size: 20px;
+    color: #c00000;
+    margin-right: 5px;
+}
+
+#info-container #event-submit{
+    /* Mudanças aqui */
+    width: 100%; 
+    max-width: 250px;
+    margin: 20px 0;
+}
+
+/* ------------------ Rodapé (Footer) ------------------ */
+footer {
+    text-align: center;
+    background-color: #353e48;
+    color: #ffffff;
+    padding: 30px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* ------------------ Dashboard ------------------ */
+.dashboard-title-container {
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.dashboard-title-container h1 {
+    font-weight: 700;
+}
+
+.dahsboard-events-container th,
+.dahsboard-events-container td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dee2e6;
+    text-align: left;
+}
+
+.dahsboard-events-container th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.dahsboard-events-container .actions-btn-container {
+    display: flex;
+    gap: 10px;
+}
+
+.dahsboard-events-container .actions-btn-container .btn-edit,
+.dahsboard-events-container .actions-btn-container .btn-delete {
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.dahsboard-events-container .actions-btn-container .btn-edit {
+    /* Cor do botão de Editar: Preto */
+    background-color: #000; 
+    color: white;
+}
+
+.dahsboard-events-container .actions-btn-container .btn-delete {
+    /* Cor do botão de Deletar: Vermelho */
+    background-color: #ff0000;
+    color: white;
+}
+
+.dahsboard-events-container .btn-edit:hover,
+.dahsboard-events-container .btn-delete:hover {
+    opacity: 0.8;
+}
+
+.dahsboard-events-container a {
+    text-decoration: none;
+    color: #000;
+}
+
+.dahsboard-events-container a:hover {
+    color: #ff0000;
+}
+
+/* ------------------ Events Edit Page ------------------ */
+#event-create-container .img-preview {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-top: 15px;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para a mensagem 'Já estou participando' */
+.already-joined-msg {
+    background-color: #ff0000; /* Fundo azul claro */
+    color:#ffffff; /* Texto azul escuro */
+    border: 1px solid #bee5eb;
+    padding: 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    max-width: 250px; /* Mesmo tamanho máximo do botão */
+    margin: 20px 0; /* Mesma margem do botão */
+}
