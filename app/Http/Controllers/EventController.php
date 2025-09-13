@@ -3,36 +3,48 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jogo;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
-use App\Models\Event;
+/**
+ * Controller para gerenciar a lógica de Jogos (Eventos).
+ * NOTA: Considerar renomear para JogoController para maior clareza.
+ */
 class EventController extends Controller
 {
-    public function index()
+    /**
+     * Exibe a página inicial com a lista de todos os jogos ou os resultados de uma busca.
+     */
+    public function index(): View
     {
         $search = request('search');
 
+        $query = Jogo::query();
+
         if ($search) {
-            $events = Jogo::where([
-                ['title', 'like', '%' . $search . '%']
-            ])->get();
-        } else {
-            $events = Jogo::all();
+            $query->where('title', 'like', '%' . $search . '%');
         }
 
         return view('welcome', [
-            'events' => $events,
+            'events' => $query->get(),
             'search' => $search
         ]);
     }
 
-    public function create()
+    /**
+     * Exibe o formulário para criar um novo jogo.
+     */
+    public function create(): View
     {
         return view('events.create');
     }
 
-    public function store(Request $request)
+    /**
+     * Salva um novo jogo no banco de dados.
+     */
+    public function store(Request $request): RedirectResponse
     {
         $jogo = new Jogo;
 
@@ -43,99 +55,87 @@ class EventController extends Controller
         $jogo->description = $request->description;
         $jogo->items = $request->items;
 
-        //Imagem Upload
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $requestImage = $request->image;
-
             $extension = $requestImage->extension();
-
             $imageName = md5($requestImage->getClientOriginalName() . strtotime("now")) . "." . $extension;
-
             $requestImage->move(public_path('img/events'), $imageName);
-
             $jogo->image = $imageName;
         }
-        $user = auth()->user();
-        $jogo->user_id = $user->id;
 
+        $jogo->user_id = auth()->id();
         $jogo->save();
 
         return redirect('/')->with('msg', 'Jogo criado com sucesso!');
     }
 
-    public function show($id)
+    /**
+     * Exibe os detalhes de um jogo específico.
+     *
+     * @param string $id O ID do jogo.
+     */
+    public function show(string $id): View
     {
         $event = Jogo::findOrFail($id);
 
-        $user = auth()->user();
         $hasUserJoined = false;
-        if ($user) {
-            $userEvents = $user->jogosParticipants->toArray();
-            foreach ($userEvents as $userEvent) {
-                if ($userEvent['id'] == $id) {
-                    $hasUserJoined = true;
-                }
-            }
-
-        $eventOwner = User::where('id', $event->user_id)->first()->toArray();
+        if (auth()->check()) {
+            // Maneira eficiente de verificar se o usuário participa, sem carregar todos os eventos.
+            $hasUserJoined = auth()->user()->jogosParticipants()->where('jogo_id', $id)->exists();
+        }
 
         return view('events.show', [
             'event' => $event,
-            'eventOwner' => $eventOwner,
+            'eventOwner' => $event->user, // Acessa a relação diretamente, mais eficiente.
             'hasUserJoined' => $hasUserJoined
         ]);
     }
-}
 
-    // Em app/Http/Controllers/EventController.php
-
-    public function dashboard()
+    /**
+     * Exibe o dashboard do usuário com seus jogos criados e os que participa.
+     */
+    public function dashboard(): View
     {
         $user = auth()->user();
 
-        // Busca os jogos que o usuário CRIOU (isso você já tinha)
-        $events = $user->jogos;
-
-        // Busca os jogos que o usuário PARTICIPA (esta é a parte nova)
-        // Estou usando 'jogosParticipants' como o nome da relação no Model User
-        $jogosAsParticipants = $user->jogosParticipants;
-
-        // Envia AMBAS as variáveis para a view
         return view('events.dashboard', [
-            'events' => $events,
-            'jogosAsParticipants' => $jogosAsParticipants
+            'events' => $user->jogos,
+            'jogosAsParticipants' => $user->jogosParticipants
         ]);
     }
 
-    public function destroy($id)
+    /**
+     * Exclui um jogo do banco de dados.
+     */
+    public function destroy(string $id): RedirectResponse
     {
-        // Corrigido: Usar o modelo Jogo em vez de Event
         Jogo::findOrFail($id)->delete();
-
         return redirect('/dashboard')->with('msg', 'Jogo excluído com sucesso!');
     }
 
-    public function edit($id)
+    /**
+     * Exibe o formulário para editar um jogo existente.
+     */
+    public function edit(string $id): View|RedirectResponse
     {
         $user = auth()->user();
-
-        // Busca o jogo pelo ID
         $event = Jogo::findOrFail($id);
 
-        // Verifica se o usuário logado é o dono do jogo
+        // Lógica de autorização: Apenas o dono do jogo pode editar.
         if ($user->id != $event->user_id) {
             return redirect('/dashboard');
         }
 
-        // Retorna a view de edição, passando os dados do jogo encontrado
         return view('events.edit', ['event' => $event]);
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Atualiza os dados de um jogo no banco de dados.
+     */
+    public function update(Request $request, string $id): RedirectResponse
     {
         $data = $request->all();
 
-        // Lógica para upload da imagem
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $requestImage = $request->image;
             $extension = $requestImage->extension();
@@ -144,33 +144,31 @@ class EventController extends Controller
             $data['image'] = $imageName;
         }
 
-        // Garantir que a coluna 'items' seja tratada como array
-        if (!isset($data['items'])) {
-            $data['items'] = [];
-        }
+        // Garante que 'items' seja um array para evitar erros na conversão para JSON.
+        $data['items'] = $request->items ?? [];
 
-        // Busca o jogo pelo ID e atualiza os dados
         Jogo::findOrFail($id)->update($data);
 
         return redirect('/dashboard')->with('msg', 'Jogo editado com sucesso!');
     }
 
-    public function joinEvent($id)
+    /**
+     * Adiciona o usuário autenticado como participante de um jogo.
+     */
+    public function joinEvent(string $id): RedirectResponse
     {
-        $user = auth()->user();
-        $user ->jogosParticipants()->attach($id);
-
+        auth()->user()->jogosParticipants()->attach($id);
         $event = Jogo::findOrFail($id);
         return redirect('/dashboard')->with('msg', 'Sua presença no jogo: ' . $event->title . ' foi confirmada!');
     }
 
-    public function leaveEvent($id)
+    /**
+     * Remove o usuário autenticado da lista de participantes de um jogo.
+     */
+    public function leaveEvent(string $id): RedirectResponse
     {
-        $user = auth()->user();
-        $user->jogosParticipants()->detach($id);
-
+        auth()->user()->jogosParticipants()->detach($id);
         $event = Jogo::findOrFail($id);
         return redirect('/dashboard')->with('msg', 'Você saiu com sucesso do jogo: ' . $event->title . '!');
     }
-
 }

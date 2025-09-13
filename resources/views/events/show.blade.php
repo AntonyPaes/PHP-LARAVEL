@@ -33,11 +33,8 @@
                         </a>
                     </form>
                 @else
-                    {{-- CORREÇÃO 1: Tag <p> fechada corretamente --}}
                     <p class="already-joined-msg">Você já está participando deste jogo!</p>
                 @endif
-
-                {{-- CORREÇÃO 2: Tag <h3> com a abertura correta --}}
                     <h3>O Jogo conta com:</h3>
                     <ul id="items-list">
                         @foreach ($event->items as $item)

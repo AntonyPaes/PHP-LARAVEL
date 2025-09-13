@@ -16,7 +16,6 @@ Route::get('/contact', function () {
     return view('contact');
 });
 
-// Corrigido: Mantem apenas a rota que usa o controller
 Route::get('/dashboard', [EventController::class, 'dashboard'])->middleware('auth');
 
 Route::post('/events/join/{id}', [EventController::class, 'joinEvent'])->middleware('auth');
